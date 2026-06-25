@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Enrollments - University Enrollment System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Enrollments</h2>
+    <a href="/enrollments/create/" class="btn btn-success">+ Enroll Student</a>
+</div>
+
+<div class="search-box">
+    <form method="get">
+        <input type="text" name="search" placeholder="Search by student name or course code..." value="{{ search }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Course Code</th>
+            <th>Course Title</th>
+            <th>Grade</th>
+            <th>Enrolled Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for enrollment in enrollments %}
+        <tr>
+            <td><a href="/students/{{ enrollment.student.id }}/">{{ enrollment.student.user.get_full_name }}</a></td>
+            <td><a href="/courses/{{ enrollment.course.id }}/">{{ enrollment.course.course_code }}</a></td>
+            <td>{{ enrollment.course.title }}</td>
+            <td>{{ enrollment.grade }}</td>
+            <td>{{ enrollment.enrolled_date|date:"M d, Y" }}</td>
+            <td>
+                <div class="btn-group">
+                    <a href="/enrollments/{{ enrollment.id }}/update/" class="btn btn-sm btn-warning">Grade</a>
+                    <a href="/enrollments/{{ enrollment.id }}/delete/" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" style="text-align: center;">No enrollments found</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

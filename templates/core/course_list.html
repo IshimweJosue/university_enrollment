@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Courses - University Enrollment System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Courses</h2>
+    <a href="/courses/create/" class="btn btn-success">+ Add Course</a>
+</div>
+
+<div class="search-box">
+    <form method="get">
+        <input type="text" name="search" placeholder="Search by course code or title..." value="{{ search }}">
+        
+        <select name="semester">
+            <option value="">All Semesters</option>
+            {% for sem in semesters %}
+                <option value="{{ sem }}">{{ sem }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Course Code</th>
+            <th>Title</th>
+            <th>Professor</th>
+            <th>Semester</th>
+            <th>Credits</th>
+            <th>Capacity</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for course in courses %}
+        <tr>
+            <td>{{ course.course_code }}</td>
+            <td>{{ course.title }}</td>
+            <td>{{ course.professor.user.get_full_name|default:"Unassigned" }}</td>
+            <td>{{ course.semester }}</td>
+            <td>{{ course.credits }}</td>
+            <td>{{ course.get_enrollment_count }}/{{ course.max_students }}</td>
+            <td>
+                <div class="btn-group">
+                    <a href="/courses/{{ course.id }}/" class="btn btn-sm btn-primary">View</a>
+                    <a href="/courses/{{ course.id }}/update/" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="/courses/{{ course.id }}/delete/" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" style="text-align: center;">No courses found</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

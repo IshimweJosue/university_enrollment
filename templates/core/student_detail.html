@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ student.user.get_full_name }} - Students{% endblock %}
+
+{% block content %}
+<div class="detail-header">
+    <h2>{{ student.user.get_full_name }}</h2>
+    <div class="btn-group">
+        <a href="/students/{{ student.id }}/update/" class="btn btn-warning">Edit</a>
+        <a href="/students/" class="btn btn-secondary">Back</a>
+    </div>
+</div>
+
+<div class="detail-grid">
+    <div class="detail-card">
+        <h3>Personal Information</h3>
+        {% if student.profile_picture %}
+            <img src="{{ student.profile_picture.url }}" alt="Profile" class="profile-pic">
+        {% endif %}
+        <p><strong>Student ID:</strong> {{ student.student_id }}</p>
+        <p><strong>Email:</strong> {{ student.user.email }}</p>
+        <p><strong>Phone:</strong> {{ student.phone }}</p>
+    </div>
+
+    <div class="detail-card">
+        <h3>Academic Information</h3>
+        <p><strong>Major:</strong> {{ student.major }}</p>
+        <p><strong>Enrollment Year:</strong> {{ student.enrollment_year }}</p>
+        <p><strong>GPA:</strong> <span class="gpa">{{ gpa }}</span></p>
+    </div>
+</div>
+
+<div class="detail-card">
+    <h3>Bio</h3>
+    <p>{{ student.bio }}</p>
+</div>
+
+<div class="detail-card">
+    <h3>Course Enrollments ({{ enrollments.count }})</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Course Code</th>
+                <th>Title</th>
+                <th>Professor</th>
+                <th>Grade</th>
+                <th>Enrolled Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enrollment in enrollments %}
+            <tr>
+                <td><a href="/courses/{{ enrollment.course.id }}/">{{ enrollment.course.course_code }}</a></td>
+                <td>{{ enrollment.course.title }}</td>
+                <td>{{ enrollment.course.professor.user.get_full_name }}</td>
+                <td>{{ enrollment.grade }}</td>
+                <td>{{ enrollment.enrolled_date|date:"M d, Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5">Not enrolled in any courses</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

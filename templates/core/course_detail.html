@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.course_code }} - Courses{% endblock %}
+
+{% block content %}
+<div class="detail-header">
+    <h2>{{ course.course_code }}: {{ course.title }}</h2>
+    <div class="btn-group">
+        <a href="/courses/{{ course.id }}/update/" class="btn btn-warning">Edit</a>
+        <a href="/courses/" class="btn btn-secondary">Back</a>
+    </div>
+</div>
+
+<div class="detail-grid">
+    <div class="detail-card">
+        <h3>Course Information</h3>
+        <p><strong>Code:</strong> {{ course.course_code }}</p>
+        <p><strong>Title:</strong> {{ course.title }}</p>
+        <p><strong>Credits:</strong> {{ course.credits }}</p>
+        <p><strong>Semester:</strong> {{ course.semester }}</p>
+    </div>
+
+    <div class="detail-card">
+        <h3>Instructor</h3>
+        {% if course.professor %}
+            <p><a href="/professors/{{ course.professor.id }}/">{{ course.professor.user.get_full_name }}</a></p>
+            <p><strong>Department:</strong> {{ course.professor.department }}</p>
+            <p><strong>Office:</strong> {{ course.professor.office_location }}</p>
+        {% else %}
+            <p>No professor assigned</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="detail-card">
+    <h3>Description</h3>
+    <p>{{ course.description }}</p>
+</div>
+
+{% if course.syllabus %}
+<div class="detail-card">
+    <h3>Course Syllabus</h3>
+    <p><a href="{{ course.syllabus.url }}" class="btn btn-primary" target="_blank">📄 Download Syllabus</a></p>
+</div>
+{% endif %}
+
+<div class="detail-card">
+    <h3>Enrollment Status</h3>
+    <p><strong>Enrolled:</strong> {{ student_count }} / {{ course.max_students }}</p>
+    {% if course.is_full %}
+        <p class="warning">🔴 Course is at maximum capacity</p>
+    {% else %}
+        <p class="success">🟢 Seats available: {{ course.max_students|add:"-student_count" }}</p>
+    {% endif %}
+</div>
+
+<div class="detail-card">
+    <h3>Enrolled Students ({{ enrollments.count }})</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Student ID</th>
+                <th>Grade</th>
+                <th>Enrolled Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for enrollment in enrollments %}
+            <tr>
+                <td><a href="/students/{{ enrollment.student.id }}/">{{ enrollment.student.user.get_full_name }}</a></td>
+                <td>{{ enrollment.student.student_id }}</td>
+                <td>{{ enrollment.grade }}</td>
+                <td>{{ enrollment.enrolled_date|date:"M d, Y" }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">No students enrolled</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

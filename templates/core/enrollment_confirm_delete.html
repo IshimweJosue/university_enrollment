@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Enrollment{% endblock %}
+
+{% block content %}
+<div class="confirm-delete">
+    <h2>Delete Enrollment</h2>
+    <p class="warning">Are you sure you want to delete the enrollment of <strong>{{ enrollment.student.user.get_full_name }}</strong> from <strong>{{ enrollment.course.course_code }}</strong>?</p>
+    <p class="info">This action cannot be undone.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="/enrollments/" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

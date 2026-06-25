@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - University Enrollment System{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <h2>Welcome to University Enrollment System</h2>
+    <p>Manage your courses, professors, and enrollments efficiently</p>
+    
+    {% if user.is_authenticated %}
+        <div class="button-group">
+            <a href="/dashboard/" class="btn btn-primary">Go to Dashboard</a>
+        </div>
+    {% else %}
+        <div class="button-group">
+            <a href="/login/" class="btn btn-primary">Login</a>
+            <a href="/register/" class="btn btn-secondary">Register</a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <h3>{{ total_professors }}</h3>
+        <p>Professors</p>
+    </div>
+    <div class="stat-card">
+        <h3>{{ total_students }}</h3>
+        <p>Students</p>
+    </div>
+    <div class="stat-card">
+        <h3>{{ total_courses }}</h3>
+        <p>Courses</p>
+    </div>
+    <div class="stat-card">
+        <h3>{{ total_enrollments }}</h3>
+        <p>Enrollments</p>
+    </div>
+</div>
+{% endblock %}

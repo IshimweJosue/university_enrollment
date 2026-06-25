@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - University Enrollment System{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h2>Login</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <p>
+            <label for="id_username">Username:</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <span class="error">{{ form.username.errors }}</span>
+            {% endif %}
+        </p>
+        
+        <p>
+            <label for="id_password">Password:</label>
+            {{ form.password }}
+            {% if form.password.errors %}
+                <span class="error">{{ form.password.errors }}</span>
+            {% endif %}
+        </p>
+        
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    
+    <p>Don't have an account? <a href="/register/">Register here</a></p>
+</div>
+{% endblock %}

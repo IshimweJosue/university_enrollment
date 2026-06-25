@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.id %}Edit{% else %}Add{% endif %} Course{% endblock %}
+
+{% block content %}
+<h2>{% if form.instance.id %}Edit Course{% else %}Add New Course{% endif %}</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    
+    <div class="form-actions">
+        <button type="submit" class="btn btn-success">Save Course</button>
+        <a href="/courses/" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ user.get_full_name }}</h2>
+
+<div class="student-info">
+    <p><strong>Student ID:</strong> {{ student.student_id }}</p>
+    <p><strong>Major:</strong> {{ student.major }}</p>
+    <p><strong>GPA:</strong> <span class="gpa">{{ student.get_gpa }}</span></p>
+</div>
+
+<h3>Your Enrollments ({{ enrollments.count }})</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Course Code</th>
+            <th>Title</th>
+            <th>Professor</th>
+            <th>Grade</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for enrollment in enrollments %}
+        <tr>
+            <td>{{ enrollment.course.course_code }}</td>
+            <td>{{ enrollment.course.title }}</td>
+            <td>{{ enrollment.course.professor.user.get_full_name }}</td>
+            <td>{{ enrollment.grade }}</td>
+            <td>
+                {% if enrollment.grade == 'Pending' %}
+                    <span class="badge badge-warning">In Progress</span>
+                {% else %}
+                    <span class="badge badge-success">Graded</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5">Not enrolled in any courses</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="/courses/" class="btn btn-primary">Browse Courses</a>
+{% endblock %}

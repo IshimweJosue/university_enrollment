@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} University Enrollment{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-brand">
+                <h1><a href="http://192.168.1.200/"> University Enrollment</a></h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="/dashboard/">Dashboard</a></li>
+                    <li><a href="/professors/">Professors</a></li>
+                    <li><a href="/students/">Students</a></li>
+                    <li><a href="/courses/">Courses</a></li>
+                    <li><a href="/enrollments/">Enrollments</a></li>
+                    {% if user.is_staff %}
+                        <li><a href="/admin/">Admin</a></li>
+                    {% endif %}
+                    <li><a href="/logout/">Logout ({{ user.username }})</a></li>
+                {% else %}
+                    <li><a href="/login/">Login</a></li>
+                    <li><a href="/register/">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                    <button class="close-alert">&times;</button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2026 University Enrollment System. All rights reserved.</p>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block title %}Professors - University Enrollment System{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Professors</h2>
+    <a href="/professors/create/" class="btn btn-success">+ Add Professor</a>
+</div>
+
+<div class="search-box">
+    <form method="get">
+        <input type="text" name="search" placeholder="Search by name, ID, or department..." value="{{ search }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Employee ID</th>
+            <th>Department</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for professor in professors %}
+        <tr>
+            <td>{{ professor.user.get_full_name }}</td>
+            <td>{{ professor.employee_id }}</td>
+            <td>{{ professor.department }}</td>
+            <td>{{ professor.phone }}</td>
+            <td>
+                <div class="btn-group">
+                    <a href="/professors/{{ professor.id }}/" class="btn btn-sm btn-primary">View</a>
+                    <a href="/professors/{{ professor.id }}/update/" class="btn btn-sm btn-warning">Edit</a>
+                    <a href="/professors/{{ professor.id }}/delete/" class="btn btn-sm btn-danger">Delete</a>
+                </div>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" style="text-align: center;">No professors found</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if is_paginated %}
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+    {% endif %}
+    <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}
